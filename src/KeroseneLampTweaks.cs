@@ -43,6 +43,7 @@ namespace KeroseneLampTweaks
             protected override void OnConfirm()
             {
                 KeroseneLampOptions.placed_burn_multiplier = placed_burn_multiplier;
+                KeroseneLampOptions.held_burn_multiplier = held_burn_multiplier;
 
                 string json_opts = FastJson.Serialize(this);
 
@@ -62,6 +63,7 @@ namespace KeroseneLampTweaks
                     custom_settings = FastJson.Deserialize<KeroseneLampSettings>(opts);
 
                     KeroseneLampOptions.placed_burn_multiplier = custom_settings.placed_burn_multiplier;
+                    KeroseneLampOptions.held_burn_multiplier = custom_settings.held_burn_multiplier;
                 }
 
                 custom_settings.AddToModSettings("Xpazeman Mini Mods");

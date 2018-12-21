@@ -31,12 +31,12 @@ namespace KeroseneLampTweaks
             [Section("Kerosene Lamp Settings")]
 
             [Name("Rate of burn for placed lamps")]
-            [Description("At what rate the fuel of a lamp will be consumed when placed. 1 is default, 0 makes lamps not consume fuel when placed, and 2 doubles the consumption.")]
+            [Description("At what rate the fuel of a lamp will be consumed when placed. 1 is default (~3 hours), 0 makes lamps not consume fuel when placed, and 2 doubles the consumption.")]
             [Slider(0f, 2f)]
             public float placed_burn_multiplier = 1f;
 
             [Name("Rate of burn for held lamps")]
-            [Description("At what rate the fuel of a lamp will be consumed when held. 1 is default, 0 makes lamps not consume fuel when equipped, and 2 doubles the consumption.")]
+            [Description("At what rate the fuel of a lamp will be consumed when held. 1 is default (~3 hours), 0 makes lamps not consume fuel when equipped, and 2 doubles the consumption.")]
             [Slider(0f, 2f)]
             public float held_burn_multiplier = 1f;
 

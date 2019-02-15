@@ -1,16 +1,10 @@
 ﻿using System.IO;
 using System.Reflection;
-using ModSettings;
 using UnityEngine;
+using Harmony;
 
 namespace KeroseneLampTweaks
 {
-    public class KeroseneLampOptions
-    {
-        public static float placed_burn_multiplier = 1f;
-        public static float held_burn_multiplier = 1f;
-    }
-
     class KeroseneLampTweaks
     {
         public static string mods_folder;
@@ -26,48 +20,92 @@ namespace KeroseneLampTweaks
             mod_options_folder = Path.Combine(mods_folder, options_folder_name);
         }
 
-        internal class KeroseneLampSettings : ModSettingsBase
+        /*public static void TurnOnLamp(ref KeroseneLampItem lamp)
         {
-            [Section("Kerosene Lamp Settings")]
-
-            [Name("Rate of burn for placed lamps")]
-            [Description("At what rate the fuel of a lamp will be consumed when placed. 1 is default (~3 hours), 0 makes lamps not consume fuel when placed, and 2 doubles the consumption.")]
-            [Slider(0f, 2f)]
-            public float placed_burn_multiplier = 1f;
-
-            [Name("Rate of burn for held lamps")]
-            [Description("At what rate the fuel of a lamp will be consumed when held. 1 is default (~3 hours), 0 makes lamps not consume fuel when equipped, and 2 doubles the consumption.")]
-            [Slider(0f, 2f)]
-            public float held_burn_multiplier = 1f;
-
-            protected override void OnConfirm()
+            if (!lamp.IsOn())
             {
-                KeroseneLampOptions.placed_burn_multiplier = placed_burn_multiplier;
-                KeroseneLampOptions.held_burn_multiplier = held_burn_multiplier;
-
-                string json_opts = FastJson.Serialize(this);
-
-                File.WriteAllText(Path.Combine(mod_options_folder, options_file_name), json_opts);
+                lamp.TurnOn(true);
+                lamp.HideEffects(false);
+                lamp.m_TurnOnEffectsTimer = Time.time + lamp.m_TurnOnEffectsDelay + 1f;
+            }
+            else
+            {
+                if (KeroseneLampOptions.mute_lamps)
+                    lamp.StopLoopingAudio();
             }
         }
 
-        internal static class GearDecaySettingsLoad
+        public static void TurnOffLamp(ref KeroseneLampItem lamp)
         {
-            private static KeroseneLampSettings custom_settings = new KeroseneLampSettings();
-
-            public static void OnLoad()
+            if (!GameManager.m_ActiveScene.Contains("Cave") && !GameManager.m_ActiveScene.Contains("Basement") && !GameManager.m_ActiveScene.Contains("Mine"))
             {
-                if (File.Exists(Path.Combine(mod_options_folder, options_file_name)))
+                if (lamp.IsOn())
                 {
-                    string opts = File.ReadAllText(Path.Combine(mod_options_folder, options_file_name));
-                    custom_settings = FastJson.Deserialize<KeroseneLampSettings>(opts);
+                    lamp.TurnOff(false);
+                }
+            }
+        }*/
 
-                    KeroseneLampOptions.placed_burn_multiplier = custom_settings.placed_burn_multiplier;
-                    KeroseneLampOptions.held_burn_multiplier = custom_settings.held_burn_multiplier;
+        public static void ColorLamps(GameObject lamp)
+        {
+            
+
+            if (KeroseneLampOptions.lamp_color != LampColor.Default)
+            {
+                Color newColor = GetNewColor();                
+
+                foreach (Light light in lamp.GetComponentsInChildren<Light>())
+                {
+                    light.color = newColor;
                 }
 
-                custom_settings.AddToModSettings("Xpazeman Mini Mods");
+                foreach (Light light in lamp.GetComponents<Light>())
+                {
+                    light.color = newColor;
+                }
+
+                /*indoor.color = new Color32(255, 105, 92, 255);
+                indoorCore.color = new Color32(255, 105, 92, 255);
+                outdoor.color = new Color32(255, 105, 92, 255);*/
             }
+        }
+
+        public static Color GetNewColor()
+        {
+            Color newColor = new Color(0.993f, 0.670f, 0.369f, 1.000f);
+
+            switch (KeroseneLampOptions.lamp_color)
+            {
+                case LampColor.Red:
+                    newColor = new Color32(255, 105, 92, 255);
+                    break;
+
+                case LampColor.Yellow:
+                    newColor = new Color32(255, 228, 92, 255);
+                    break;
+
+                case LampColor.Blue:
+                    newColor = new Color32(92, 105, 255, 255);
+                    break;
+
+                case LampColor.Cyan:
+                    newColor = new Color32(92, 225, 255, 255);
+                    break;
+
+                case LampColor.Green:
+                    newColor = new Color32(91, 216, 95, 255);
+                    break;
+
+                case LampColor.Purple:
+                    newColor = new Color32(208, 91, 216, 255);
+                    break;
+
+                case LampColor.White:
+                    newColor = new Color32(255, 255, 255, 255);
+                    break;
+            }
+
+            return newColor;
         }
     }
 }

@@ -103,6 +103,10 @@ namespace KeroseneLampTweaks
                 case LampColor.White:
                     newColor = new Color32(255, 255, 255, 255);
                     break;
+
+                case LampColor.Custom:
+                    newColor = new Color32((byte)KeroseneLampOptions.lampColorR, (byte)KeroseneLampOptions.lampColorG, (byte)KeroseneLampOptions.lampColorB, 255);
+                    break;
             }
 
             return newColor;

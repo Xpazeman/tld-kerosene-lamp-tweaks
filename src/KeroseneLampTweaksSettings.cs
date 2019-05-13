@@ -12,6 +12,9 @@ namespace KeroseneLampTweaks
 
         public static float lamp_range = 1f;
         public static LampColor lamp_color = LampColor.Default;
+        public static int lampColorR = 0;
+        public static int lampColorG = 0;
+        public static int lampColorB = 0;
 
         public static bool mute_lamps = false;
 
@@ -25,7 +28,7 @@ namespace KeroseneLampTweaks
 
     public enum LampColor
     {
-        Default, Red, Yellow, Blue, Cyan, Green, Purple, White
+        Default, Red, Yellow, Blue, Cyan, Green, Purple, White, Custom
     }
 
     internal class KeroseneLampSettings : ModSettingsBase
@@ -48,9 +51,22 @@ namespace KeroseneLampTweaks
         public float lamp_range = 1f;
 
         [Name("Lamp Light Color")]
-        [Description("Color for the lamp light (only when placed).")]
-        [Choice("Default (Orange)", "Red", "Yellow", "Blue", "Cyan", "Green", "Purple", "White")]
+        [Description("Color for the lamp light.")]
+        [Choice("Default (Orange)", "Red", "Yellow", "Blue", "Cyan", "Green", "Purple", "White", "Custom")]
         public LampColor lamp_color = LampColor.Default;
+
+        [Name("Lamp Color Red")]
+        [Slider(0, 255)]
+        public int lampColorR = 0;
+
+        [Name("Lamp Color Green")]
+        [Slider(0, 255)]
+        public int lampColorG = 0;
+
+        [Name("Lamp Color Blue")]
+        [Slider(0, 255)]
+        public int lampColorB = 0;
+
 
         [Name("Mute lamps audio")]
         [Description("This enables lamps to be silent when turned on and placed.")]
@@ -95,6 +111,10 @@ namespace KeroseneLampTweaks
 
             KeroseneLampOptions.lamp_color = lamp_color;
 
+            KeroseneLampOptions.lampColorR = lampColorR;
+            KeroseneLampOptions.lampColorG = lampColorG;
+            KeroseneLampOptions.lampColorB = lampColorB;
+
             KeroseneLampOptions.mute_lamps = mute_lamps;
 
             /*KeroseneLampOptions.auto_on = auto_on;
@@ -113,14 +133,32 @@ namespace KeroseneLampTweaks
 
         protected override void OnChange(FieldInfo field, object oldVal, object newVal)
         {
-            /*if (field.Name == nameof(auto_on) || field.Name == nameof(auto_off))
+            if (field.Name == nameof(lamp_color))
             {
-                RefreshFields();
-            }*/
+                ChangeColorPreset((LampColor)newVal);
+            }
+            else if (field.Name == nameof(lampColorR) || field.Name == nameof(lampColorG) || field.Name == nameof(lampColorB))
+            {
+                lamp_color = LampColor.Custom;
+            }
+
+            RefreshFields();
         }
 
         internal void RefreshFields()
         {
+            if (lamp_color == LampColor.Custom)
+            {
+                SetFieldVisible(nameof(lampColorR), true);
+                SetFieldVisible(nameof(lampColorG), true);
+                SetFieldVisible(nameof(lampColorB), true);
+            }
+            else
+            {
+                SetFieldVisible(nameof(lampColorR), false);
+                SetFieldVisible(nameof(lampColorG), false);
+                SetFieldVisible(nameof(lampColorB), false);
+            }
             /*SetFieldVisible(nameof(auto_off), auto_on);
 
             SetFieldVisible(nameof(hour_on), auto_on);
@@ -128,6 +166,11 @@ namespace KeroseneLampTweaks
 
             SetFieldVisible(nameof(hour_off), auto_on);
             SetFieldVisible(nameof(minute_off), auto_on);*/
+        }
+
+        internal void ChangeColorPreset(LampColor newPreset)
+        {
+
         }
     }
 
@@ -148,6 +191,10 @@ namespace KeroseneLampTweaks
                 KeroseneLampOptions.lamp_range = custom_settings.lamp_range;
 
                 KeroseneLampOptions.lamp_color = custom_settings.lamp_color;
+
+                KeroseneLampOptions.lampColorR = custom_settings.lampColorR;
+                KeroseneLampOptions.lampColorG = custom_settings.lampColorG;
+                KeroseneLampOptions.lampColorB = custom_settings.lampColorB;
 
                 /*KeroseneLampOptions.auto_on = custom_settings.auto_on;
                 KeroseneLampOptions.auto_off = custom_settings.auto_off;

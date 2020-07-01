@@ -5,33 +5,12 @@ using System.Reflection;
 
 namespace KeroseneLampTweaks
 {
-    public class KeroseneLampOptions
-    {
-        public static float placed_burn_multiplier = 1f;
-        public static float held_burn_multiplier = 1f;
-
-        public static float lamp_range = 1f;
-        public static LampColor lamp_color = LampColor.Default;
-        public static int lampColorR = 0;
-        public static int lampColorG = 0;
-        public static int lampColorB = 0;
-
-        public static bool mute_lamps = false;
-
-        /*public static bool auto_on = false;
-        public static bool auto_off = false;
-        public static int hour_on = 18;
-        public static int minute_on = 30;
-        public static int hour_off = 7;
-        public static int minute_off = 15;*/
-    }
-
     public enum LampColor
     {
         Default, Red, Yellow, Blue, Cyan, Green, Purple, White, Custom
     }
 
-    internal class KeroseneLampSettings : ModSettingsBase
+    internal class KeroseneLampSettings : JsonModSettings
     {
         [Section("Base Settings")]
 
@@ -67,81 +46,12 @@ namespace KeroseneLampTweaks
         [Slider(0, 255)]
         public int lampColorB = 0;
 
-
         [Name("Mute lamps audio")]
         [Description("This enables lamps to be silent when turned on and placed.")]
         public bool mute_lamps = false;
 
-        /*[Section("Auto Lamps")]
-
-        [Name("Make lamps automatic")]
-        [Description("This enables lamps to turn on automatically between set times.")]
-        public bool auto_on = false;
-
-        [Name("Make lamps auto turn off")]
-        [Description("This enables lamps to turn off automatically after off time.\nWARNING!: Setting this to 'Yes' will make placed lamps ALWAYS be turned off if outside of the 'on' hours, except in mines, caves, and basements.")]
-        public bool auto_off = false;
-
-        [Name("Turn on hour")]
-        [Description("During which hour lamps should turn on.")]
-        [Slider(0, 23)]
-        public int hour_on = 18;
-
-        [Name("Turn on minutes")]
-        [Description("Minutes on the turn on hour when lamps should turn on.")]
-        [Slider(0, 59)]
-        public int minute_on = 30;
-
-        [Name("Turn off hour")]
-        [Description("During which hour lamps should turn off.")]
-        [Slider(0, 23)]
-        public int hour_off = 7;
-
-        [Name("Turn off minutes")]
-        [Description("Minutes on the turn off hour when lamps should turn off.")]
-        [Slider(0, 59)]
-        public int minute_off = 15;*/
-
-        protected override void OnConfirm()
-        {
-            KeroseneLampOptions.placed_burn_multiplier = (float)Math.Round(placed_burn_multiplier, 2);
-            KeroseneLampOptions.held_burn_multiplier = (float)Math.Round(held_burn_multiplier, 2);
-
-            KeroseneLampOptions.lamp_range = (float)Math.Round(lamp_range, 2);
-
-            KeroseneLampOptions.lamp_color = lamp_color;
-
-            KeroseneLampOptions.lampColorR = lampColorR;
-            KeroseneLampOptions.lampColorG = lampColorG;
-            KeroseneLampOptions.lampColorB = lampColorB;
-
-            KeroseneLampOptions.mute_lamps = mute_lamps;
-
-            /*KeroseneLampOptions.auto_on = auto_on;
-            KeroseneLampOptions.auto_off = auto_off;
-            
-
-            KeroseneLampOptions.hour_on = hour_on;
-            KeroseneLampOptions.minute_on = minute_on;
-            KeroseneLampOptions.hour_off = hour_off;
-            KeroseneLampOptions.minute_off = minute_off;*/
-
-            string json_opts = FastJson.Serialize(this);
-
-            File.WriteAllText(Path.Combine(KeroseneLampTweaks.mod_options_folder, KeroseneLampTweaks.options_file_name), json_opts);
-        }
-
         protected override void OnChange(FieldInfo field, object oldVal, object newVal)
         {
-            if (field.Name == nameof(lamp_color))
-            {
-                ChangeColorPreset((LampColor)newVal);
-            }
-            else if (field.Name == nameof(lampColorR) || field.Name == nameof(lampColorG) || field.Name == nameof(lampColorB))
-            {
-                lamp_color = LampColor.Custom;
-            }
-
             RefreshFields();
         }
 
@@ -159,57 +69,18 @@ namespace KeroseneLampTweaks
                 SetFieldVisible(nameof(lampColorG), false);
                 SetFieldVisible(nameof(lampColorB), false);
             }
-            /*SetFieldVisible(nameof(auto_off), auto_on);
-
-            SetFieldVisible(nameof(hour_on), auto_on);
-            SetFieldVisible(nameof(minute_on), auto_on);
-
-            SetFieldVisible(nameof(hour_off), auto_on);
-            SetFieldVisible(nameof(minute_off), auto_on);*/
-        }
-
-        internal void ChangeColorPreset(LampColor newPreset)
-        {
-
         }
     }
 
-    internal static class GearDecaySettingsLoad
+    internal static class Settings
     {
-        private static KeroseneLampSettings custom_settings = new KeroseneLampSettings();
+        public static KeroseneLampSettings options;
 
         public static void OnLoad()
         {
-            if (File.Exists(Path.Combine(KeroseneLampTweaks.mod_options_folder, KeroseneLampTweaks.options_file_name)))
-            {
-                string opts = File.ReadAllText(Path.Combine(KeroseneLampTweaks.mod_options_folder, KeroseneLampTweaks.options_file_name));
-                custom_settings = FastJson.Deserialize<KeroseneLampSettings>(opts);
-
-                KeroseneLampOptions.placed_burn_multiplier = custom_settings.placed_burn_multiplier;
-                KeroseneLampOptions.held_burn_multiplier = custom_settings.held_burn_multiplier;
-
-                KeroseneLampOptions.lamp_range = custom_settings.lamp_range;
-
-                KeroseneLampOptions.lamp_color = custom_settings.lamp_color;
-
-                KeroseneLampOptions.lampColorR = custom_settings.lampColorR;
-                KeroseneLampOptions.lampColorG = custom_settings.lampColorG;
-                KeroseneLampOptions.lampColorB = custom_settings.lampColorB;
-
-                /*KeroseneLampOptions.auto_on = custom_settings.auto_on;
-                KeroseneLampOptions.auto_off = custom_settings.auto_off;
-                KeroseneLampOptions.mute_lamps = custom_settings.mute_lamps;
-
-                KeroseneLampOptions.hour_on = custom_settings.hour_on;
-                KeroseneLampOptions.minute_on = custom_settings.minute_on;
-
-                KeroseneLampOptions.hour_off = custom_settings.hour_off;
-                KeroseneLampOptions.minute_off = custom_settings.minute_off;*/
-
-                custom_settings.RefreshFields();
-            }
-
-            custom_settings.AddToModSettings("Kerosene Lamp Tweaks");
+            options = new KeroseneLampSettings();
+            options.RefreshFields();
+            options.AddToModSettings("Kerosene Lamps Settings");
         }
     }
 }

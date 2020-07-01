@@ -9,15 +9,16 @@ namespace KeroseneLampTweaks
     {
         public static void Prefix(ref KeroseneLampItem __instance, ref float hoursBurned)
         {
-            var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
+            //var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
+            var gi = __instance.m_GearItem;
 
             if (!gi.m_InPlayerInventory)
             {
-                hoursBurned *= KeroseneLampOptions.placed_burn_multiplier;
+                hoursBurned *= Settings.options.placed_burn_multiplier;
             }
             else
             {
-                hoursBurned *= KeroseneLampOptions.held_burn_multiplier;
+                hoursBurned *= Settings.options.held_burn_multiplier;
             }
         }
     }
@@ -31,57 +32,25 @@ namespace KeroseneLampTweaks
 
         public static void Postfix(ref KeroseneLampItem __instance)
         {
-            var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
+            //var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
+            var gi = __instance.m_GearItem;
 
             if (!gi.m_InPlayerInventory)
             {
-                if (KeroseneLampOptions.mute_lamps)
+                if (Settings.options.mute_lamps)
                     __instance.StopLoopingAudio();
-
-                /*var time = GameManager.GetTimeOfDayComponent();
-                int hour = time.GetHour();
-                int minute = time.GetMinutes();
-
-                int curTime = (hour * 100) + minute;
-
-                int onTime = (KeroseneLampOptions.hour_on * 100) + KeroseneLampOptions.minute_on;
-                int offTime = (KeroseneLampOptions.hour_off * 100) + KeroseneLampOptions.minute_off;
-
-                if (offTime < onTime)
-                {
-                    if ((curTime >= 0 && curTime < offTime) || (curTime <= 2400 && curTime > onTime))
-                    {
-                        if (KeroseneLampOptions.auto_on)
-                            KeroseneLampTweaks.TurnOnLamp(ref __instance);
-                    }
-                    else
-                    {
-                        if (KeroseneLampOptions.auto_off)
-                            KeroseneLampTweaks.TurnOffLamp(ref __instance);
-                    }
-                }
-                else
-                {
-                    if ((curTime >= 0 && curTime < onTime) || (curTime <= 2400 && curTime > offTime))
-                    {
-                        if (KeroseneLampOptions.auto_off)
-                            KeroseneLampTweaks.TurnOffLamp(ref __instance);
-                    }
-                    else
-                    {
-                        if (KeroseneLampOptions.auto_on)
-                            KeroseneLampTweaks.TurnOnLamp(ref __instance);
-                    }
-                }*/
             }
 
-            Light indoor = Traverse.Create(__instance).Field("m_LightIndoor").GetValue<Light>();
+            /*Light indoor = Traverse.Create(__instance).Field("m_LightIndoor").GetValue<Light>();
             Light indoorCore = Traverse.Create(__instance).Field("m_LightIndoorCore").GetValue<Light>();
-            Light outdoor = Traverse.Create(__instance).Field("m_LightOutdoor").GetValue<Light>();
+            Light outdoor = Traverse.Create(__instance).Field("m_LightOutdoor").GetValue<Light>();*/
+            Light indoor = __instance.m_LightIndoor;
+            Light indoorCore = __instance.m_LightIndoorCore;
+            Light outdoor = __instance.m_LightOutdoor;
 
-            indoor.range = INDOOR_DEF_RNG * KeroseneLampOptions.lamp_range;
-            indoorCore.range = INDOORCORE_DEF_RNG * KeroseneLampOptions.lamp_range;
-            outdoor.range = OUTDOOR_DEF_RNG * KeroseneLampOptions.lamp_range;
+            indoor.range = INDOOR_DEF_RNG * Settings.options.lamp_range;
+            indoorCore.range = INDOORCORE_DEF_RNG * Settings.options.lamp_range;
+            outdoor.range = OUTDOOR_DEF_RNG * Settings.options.lamp_range;
         }
         
     }
@@ -96,8 +65,8 @@ namespace KeroseneLampTweaks
         {
 
             if (__instance.gameObject.name.Contains("KerosceneLamp")){
-                __instance.m_LightIndoor.range = INDOOR_DEF_RNG * KeroseneLampOptions.lamp_range;
-                __instance.m_LightOutdoor.range = OUTDOOR_DEF_RNG * KeroseneLampOptions.lamp_range;
+                __instance.m_LightIndoor.range = INDOOR_DEF_RNG * Settings.options.lamp_range;
+                __instance.m_LightOutdoor.range = OUTDOOR_DEF_RNG * Settings.options.lamp_range;
 
                 KeroseneLampTweaks.ColorLamps(__instance.gameObject);
             }
@@ -139,7 +108,8 @@ namespace KeroseneLampTweaks
 
 
             KeroseneLampItem keroseneLampItem = null;
-            var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
+            //var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
+            var gi = __instance.m_GearItem;
 
             if (gi)
             {

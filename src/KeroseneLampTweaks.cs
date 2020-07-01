@@ -1,56 +1,24 @@
 ﻿using System.IO;
 using System.Reflection;
 using UnityEngine;
-using Harmony;
+using MelonLoader;
 
 namespace KeroseneLampTweaks
 {
-    class KeroseneLampTweaks
+    class KeroseneLampTweaks : MelonMod
     {
-        public static string mods_folder;
-        public static string mod_options_folder;
-        public static string options_folder_name = "xpazeman-minimods";
-        public static string options_file_name = "config-lamps.json";
-
-        public static void OnLoad()
+        
+        public override void OnApplicationStart()
         {
             Debug.Log("[kerosene-lamp-tweaks] Version " + Assembly.GetExecutingAssembly().GetName().Version);
 
-            mods_folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            mod_options_folder = Path.Combine(mods_folder, options_folder_name);
+            Settings.OnLoad();
         }
-
-        /*public static void TurnOnLamp(ref KeroseneLampItem lamp)
-        {
-            if (!lamp.IsOn())
-            {
-                lamp.TurnOn(true);
-                lamp.HideEffects(false);
-                lamp.m_TurnOnEffectsTimer = Time.time + lamp.m_TurnOnEffectsDelay + 1f;
-            }
-            else
-            {
-                if (KeroseneLampOptions.mute_lamps)
-                    lamp.StopLoopingAudio();
-            }
-        }
-
-        public static void TurnOffLamp(ref KeroseneLampItem lamp)
-        {
-            if (!GameManager.m_ActiveScene.Contains("Cave") && !GameManager.m_ActiveScene.Contains("Basement") && !GameManager.m_ActiveScene.Contains("Mine"))
-            {
-                if (lamp.IsOn())
-                {
-                    lamp.TurnOff(false);
-                }
-            }
-        }*/
 
         public static void ColorLamps(GameObject lamp)
         {
             
-
-            if (KeroseneLampOptions.lamp_color != LampColor.Default)
+            if (Settings.options.lamp_color != LampColor.Default)
             {
                 Color newColor = GetNewColor();                
 
@@ -63,10 +31,6 @@ namespace KeroseneLampTweaks
                 {
                     light.color = newColor;
                 }
-
-                /*indoor.color = new Color32(255, 105, 92, 255);
-                indoorCore.color = new Color32(255, 105, 92, 255);
-                outdoor.color = new Color32(255, 105, 92, 255);*/
             }
         }
 
@@ -74,7 +38,7 @@ namespace KeroseneLampTweaks
         {
             Color newColor = new Color(0.993f, 0.670f, 0.369f, 1.000f);
 
-            switch (KeroseneLampOptions.lamp_color)
+            switch (Settings.options.lamp_color)
             {
                 case LampColor.Red:
                     newColor = new Color32(255, 105, 92, 255);
@@ -105,7 +69,7 @@ namespace KeroseneLampTweaks
                     break;
 
                 case LampColor.Custom:
-                    newColor = new Color32((byte)KeroseneLampOptions.lampColorR, (byte)KeroseneLampOptions.lampColorG, (byte)KeroseneLampOptions.lampColorB, 255);
+                    newColor = new Color32((byte)Settings.options.lampColorR, (byte)Settings.options.lampColorG, (byte)Settings.options.lampColorB, 255);
                     break;
             }
 

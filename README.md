@@ -14,3 +14,8 @@ Mod for The Long Dark to modify the rates of fuel consumption for kerosene lamps
 + **Lamp Light Range Modifier**: Multiplier for how far the light from lamps is cast. 
 + **Lamp Light Color**: Color for the lamp light. You can choose a preset, o select custom and choose your own color.
 + **Mute lamps audio**: This enables lamps to be silent when turned on and placed in the game.
+
+##Updates
+
+### v2.1
+* Updated to work with TLD 1.95 - Fury, then silence.

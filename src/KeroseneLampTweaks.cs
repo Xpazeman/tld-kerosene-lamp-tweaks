@@ -2,16 +2,15 @@
 using System.Reflection;
 using UnityEngine;
 using MelonLoader;
+using Il2Cpp;
 
 namespace KeroseneLampTweaks
 {
     class KeroseneLampTweaks : MelonMod
     {
         
-        public override void OnApplicationStart()
+        public override void OnInitializeMelon()
         {
-            Debug.Log("[kerosene-lamp-tweaks] Version " + Assembly.GetExecutingAssembly().GetName().Version);
-
             Settings.OnLoad();
         }
 

@@ -1,6 +1,7 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
+using Il2Cpp;
+using Il2CppTLD.Gear;
 
 namespace KeroseneLampTweaks
 {
@@ -41,9 +42,6 @@ namespace KeroseneLampTweaks
                     __instance.StopLoopingAudio();
             }
 
-            /*Light indoor = Traverse.Create(__instance).Field("m_LightIndoor").GetValue<Light>();
-            Light indoorCore = Traverse.Create(__instance).Field("m_LightIndoorCore").GetValue<Light>();
-            Light outdoor = Traverse.Create(__instance).Field("m_LightOutdoor").GetValue<Light>();*/
             Light indoor = __instance.m_LightIndoor;
             Light indoorCore = __instance.m_LightIndoorCore;
             Light outdoor = __instance.m_LightOutdoor;

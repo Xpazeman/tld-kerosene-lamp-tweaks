@@ -2,11 +2,15 @@
 
 Mod for The Long Dark to modify the rates of fuel consumption for kerosene lamps and the color they emit.
 
+##Updates
+### v2.2
+* Updated to work with TLD 2.06
+
+### v2.1
+* Updated to work with TLD 1.95 - Fury, then silence.
+
 ## Installing the mod
-* If you haven't done so already, install MelonLoader by downloading and running [MelonLoader.Installer.exe](https://github.com/HerpDerpinstine/MelonLoader/releases/latest/download/MelonLoader.Installer.exe).
-* You'll need to download and install [ModSettings](https://github.com/zeobviouslyfakeacc/ModSettings/releases/download/v1.6/ModSettings.dll) by Zeo. **MOD WON'T WORK WITHOUT IT**
-* Download the latest version of KeroseneLampTweaks.dll from the [releases page](https://github.com/Xpazeman/tld-kerosene-lamp-tweaks/releases/latest).
-* Move KeroseneLampTweaks.dll into the Mods folder in your TLD install directory.
+* Read the [installation instructions on the modlist](https://xpazeman.com/tld-mod-list/install.html)
 
 ## Options
 + **Rate of burn for placed lamps**: Modifier for the rate of consumption when the lamp is placed. 0 is no consumption, 1 is game default, 2 is double the consumption.
@@ -15,7 +19,3 @@ Mod for The Long Dark to modify the rates of fuel consumption for kerosene lamps
 + **Lamp Light Color**: Color for the lamp light. You can choose a preset, o select custom and choose your own color.
 + **Mute lamps audio**: This enables lamps to be silent when turned on and placed in the game.
 
-##Updates
-
-### v2.1
-* Updated to work with TLD 1.95 - Fury, then silence.

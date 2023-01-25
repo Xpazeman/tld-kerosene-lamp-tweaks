@@ -3,11 +3,15 @@
 Mod for The Long Dark to modify the rates of fuel consumption for kerosene lamps and the color they emit.
 
 ##Updates
+### v2.3
+* NEW: Added options to select a different color for Spelunker's lamp
+* FIX: Fixed first person light coloring for Spelunker's lamp
+
 ### v2.2
-* Updated to work with TLD 2.06
+* FIX: Updated to work with TLD 2.06
 
 ### v2.1
-* Updated to work with TLD 1.95 - Fury, then silence.
+* FIX: Updated to work with TLD 1.95 - Fury, then silence.
 
 ## Installing the mod
 * Read the [installation instructions on the modlist](https://xpazeman.com/tld-mod-list/install.html)

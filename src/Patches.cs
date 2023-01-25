@@ -38,7 +38,7 @@ namespace KeroseneLampTweaks
 
             if (!gi.m_InPlayerInventory)
             {
-                if (Settings.options.mute_lamps)
+                if (Settings.options.muteLamps)
                     __instance.StopLoopingAudio();
             }
 
@@ -62,7 +62,8 @@ namespace KeroseneLampTweaks
         public static void Prefix(FirstPersonLightSource __instance)
         {
 
-            if (__instance.gameObject.name.Contains("KerosceneLamp")){
+            if (__instance.gameObject.name.Contains("KerosceneLamp") || __instance.gameObject.name.Contains("KeroseneLamp"))
+            {
                 __instance.m_LightIndoor.range = INDOOR_DEF_RNG * Settings.options.lamp_range;
                 __instance.m_LightOutdoor.range = OUTDOOR_DEF_RNG * Settings.options.lamp_range;
 
@@ -76,14 +77,25 @@ namespace KeroseneLampTweaks
     {
         public static void Prefix(KeroseneLampIntensity __instance)
         {
+            Color newColor;
+            
+            if (__instance.gameObject.name.Contains("Spelunkers") && Settings.options.spelunkerColor)
+            {
+                newColor = KeroseneLampTweaks.GetNewColor(Settings.options.spelunkersLampColor, true);
+            }
+            else
+            {
+                newColor = KeroseneLampTweaks.GetNewColor(Settings.options.lampColor);
+            }
+
             Gradient gradient = new Gradient();
             GradientColorKey[] colorKey;
             GradientAlphaKey[] alphaKey;
 
             colorKey = new GradientColorKey[2];
-            colorKey[0].color = KeroseneLampTweaks.GetNewColor();
+            colorKey[0].color = newColor;
             colorKey[0].time = 0.0f;
-            colorKey[1].color = KeroseneLampTweaks.GetNewColor();
+            colorKey[1].color = newColor;
             colorKey[1].time = 1.0f;
 
             alphaKey = new GradientAlphaKey[2];
@@ -106,7 +118,6 @@ namespace KeroseneLampTweaks
 
 
             KeroseneLampItem keroseneLampItem = null;
-            //var gi = Traverse.Create(__instance).Field("m_GearItem").GetValue<GearItem>();
             var gi = __instance.m_GearItem;
 
             if (gi)
